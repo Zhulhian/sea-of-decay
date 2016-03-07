@@ -15,14 +15,14 @@ import java.util.zip.DataFormatException;
 public class REXReader {
     static public XPFile loadXP(String filename) throws IOException, DataFormatException {
         byte[] compressed = IOUtils.toByteArray(REXReader.class.getResourceAsStream(filename)); //Files.readAllBytes(new File(filename).toPath());
-        System.out.println("Size of compressed data: " + compressed.length);
+        //System.out.println("Size of compressed data: " + compressed.length);
         byte[] decompressed = CompressionUtils.gzipDecodeByteArray(compressed);
-        System.out.println("Size of decompressed data: " + decompressed.length);
+        //System.out.println("Size of decompressed data: " + decompressed.length);
         ByteBuffer bb = ByteBuffer.wrap(decompressed);
         bb.order(ByteOrder.LITTLE_ENDIAN);
         int version = bb.getInt();
         int no_layers = bb.getInt();
-        System.out.println("version is " + version + ", layers = " + no_layers);
+        //System.out.println("version is " + version + ", layers = " + no_layers);
         ArrayList<XPLayer> layers = new ArrayList<>();
 
         // x-value with "index/height", and y-value with "index%height"
