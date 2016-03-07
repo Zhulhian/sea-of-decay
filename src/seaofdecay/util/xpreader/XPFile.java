@@ -3,6 +3,7 @@ package seaofdecay.util.xpreader;
 import seaofdecay.util.asciipanel.AsciiPanel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bison on 02-01-2016.
@@ -10,9 +11,9 @@ import java.util.ArrayList;
 public class XPFile {
     int version;
     int noLayers;
-    ArrayList<XPLayer> layers;
+    List<XPLayer> layers;
 
-    public XPFile(int version, int noLayers, ArrayList<XPLayer> layers) {
+    public XPFile(int version, int noLayers, List<XPLayer> layers) {
         this.version = version;
         this.noLayers = noLayers;
         this.layers = layers;

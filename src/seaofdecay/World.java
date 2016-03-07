@@ -15,7 +15,7 @@ public class World {
     public int height() { return height; }
 
     private List<Creature> creatures;
-    public List<Creature> getCreatures() {
+    public Iterable<Creature> getCreatures() {
         return creatures;
     }
 
@@ -28,7 +28,7 @@ public class World {
     }
 
     public void update() {
-        List<Creature> toUpdate = new ArrayList<>(creatures);
+        Iterable<Creature> toUpdate = new ArrayList<>(creatures);
         for (Creature creature : toUpdate) {
             creature.update();
         }

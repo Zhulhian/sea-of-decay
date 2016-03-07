@@ -1,5 +1,7 @@
 package seaofdecay.screens;
 
+import seaofdecay.ApplicationMain;
+import seaofdecay.screens.PlayScreen.WorldType;
 import seaofdecay.util.asciipanel.AsciiPanel;
 
 import java.awt.*;
@@ -9,12 +11,13 @@ import java.awt.event.KeyEvent;
 public class WinScreen implements Screen {
 
     public void displayOutput(AsciiPanel terminal) {
-        terminal.write("Wow. You won. Congratulations.", 1, 1, Color.orange);
-        terminal.writeCenter(" - - Press [ENTER] to restart - - ",
-                                20, Color.orange);
+
+	terminal.writeCenter("Wow. You won. Congratulations.", 1, Color.orange);
+	terminal.writeCenter(" - - Press [ENTER] to restart - - ", ApplicationMain.HEIGHT - 10, Color.orange);
+
     }
 
     public Screen respondToUserInput(KeyEvent key) {
-        return key.getKeyCode() == KeyEvent.VK_ENTER ? new PlayScreen(PlayScreen.WorldType.Valley) : this;
+	return key.getKeyCode() == KeyEvent.VK_ENTER ? new PlayScreen(WorldType.VALLEY) : this;
     }
 }

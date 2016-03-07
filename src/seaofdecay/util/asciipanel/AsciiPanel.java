@@ -334,7 +334,7 @@ public class AsciiPanel extends JPanel {
 		this.charHeight = charHeight;
 
 		try {
-			glyphSprite = ImageIO.read(AsciiPanel.class.getResource("cp437_12x12.png"));
+			glyphSprite = ImageIO.read(AsciiPanel.class.getResource(filename));
 		} catch (IOException e) {
 			System.err.println("loadGlyphs(): " + e.getMessage());
 		}
@@ -350,7 +350,7 @@ public class AsciiPanel extends JPanel {
 
 	private void loadGlyphs() {
 		// The default font file.
-		loadGlyphs("cp437_12x12.png", 12, 12);
+		loadGlyphs("cp437_10x10.png", 10, 10);
 	}
 
 	/**

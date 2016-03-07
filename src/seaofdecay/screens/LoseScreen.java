@@ -4,11 +4,10 @@ import seaofdecay.util.asciipanel.AsciiPanel;
 
 import java.awt.event.KeyEvent;
 
-
+/**
+ * The lose screen. Is displayed when the character dies.
+ * */
 public class LoseScreen implements Screen {
-
-    private int width;
-    private int height;
 
     public void displayOutput(AsciiPanel terminal) {
         resMgr.drawRes(terminal, "SoD_Lose.xp");

@@ -20,13 +20,13 @@ public enum Tile {
 		return this != FUNGI_WALL && this != VALLEY_WALL && this != BOUNDS;
 	}
 
-	private char glyph;
+	private final char glyph;
 	public char glyph() { return glyph; }
 
-	private Color fgColor;
+	private final Color fgColor;
 	public Color fgColor() { return fgColor; }
 
-	private Color bgColor;
+	private final Color bgColor;
 	public Color bgColor() { return bgColor; }
 
 	Tile(char glyph, Color fgColor, Color bgColor) {
