@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 public class LoseScreen implements Screen {
 
     public void displayOutput(AsciiPanel terminal) {
-        resMgr.drawRes(terminal, "SoD_Lose.xp");
+        RES_MGR.drawRes(terminal, "SoD_Lose.xp");
     }
 
     public Screen respondToUserInput(KeyEvent key) {

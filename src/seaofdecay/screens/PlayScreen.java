@@ -77,7 +77,7 @@ public class PlayScreen implements Screen {
 //    }
 
     private void displayTiles(AsciiPanel terminal, int left, int top) {
-	terminal.setDefaultBackgroundColor(Screen.bg);
+	terminal.setDefaultBackgroundColor(Screen.BGC);
 	for (int x = 0; x < screenWidth; x++) {
 	    for (int y = 0; y < screenHeight; y++) {
 

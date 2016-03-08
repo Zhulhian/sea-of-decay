@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 public class StartScreen implements Screen {
 
     public void displayOutput(AsciiPanel terminal) {
-        resMgr.drawRes(terminal, "SoD_Intro.xp");
+        RES_MGR.drawRes(terminal, "SoD_Intro.xp");
     }
 
     public Screen respondToUserInput(KeyEvent key) {

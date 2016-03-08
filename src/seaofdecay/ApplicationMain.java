@@ -46,7 +46,7 @@ public class ApplicationMain extends JFrame implements KeyListener {
 	}
 
 	public void repaint() {
-		terminal.setDefaultBackgroundColor(Screen.bg);
+		terminal.setDefaultBackgroundColor(Screen.BGC);
 		// terminal.clear() flushes the buffer and fills the terminal with
 		// the default background color.
 		terminal.clear();

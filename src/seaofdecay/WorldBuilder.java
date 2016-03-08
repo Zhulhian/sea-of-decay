@@ -62,7 +62,7 @@ public class WorldBuilder {
 	}
 
 	public WorldBuilder makeValley() {
-		XPFile valley = Screen.resMgr.getRes("SoD_Valley.xp");
+		XPFile valley = Screen.RES_MGR.getRes("SoD_Valley.xp");
 		for (int x = 0; x < valley.layer(0).width; x++) {
 			for (int y = 0; y < valley.layer(0).height; y++) {
 				switch (valley.layer(0).data[x][y].code) {
