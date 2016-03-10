@@ -1,6 +1,7 @@
 package seaofdecay;
 
 import seaofdecay.screens.Screen;
+import seaofdecay.util.xpreader.XPChar;
 import seaofdecay.util.xpreader.XPFile;
 
 public class WorldBuilder {
@@ -65,7 +66,8 @@ public class WorldBuilder {
 		XPFile valley = Screen.RES_MGR.getRes("SoD_Valley.xp");
 		for (int x = 0; x < valley.layer(0).width; x++) {
 			for (int y = 0; y < valley.layer(0).height; y++) {
-				switch (valley.layer(0).data[x][y].code) {
+				XPChar tile = valley.layer(0).data[x][y];
+				switch (tile.code) {
 					case '#':
 						tiles[x][y] = Tile.VALLEY_WALL;
 						break;
