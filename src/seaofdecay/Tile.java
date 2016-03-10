@@ -9,8 +9,8 @@ public enum Tile {
 	FUNGI_WALL((char)6, new Color(34, 102, 102), new Color(152, 193, 193)), // 158 is good as well.
 
 	VALLEY_WALL('#', new Color(255, 153, 51), new Color(255, 217, 102)),
-	VALLEY_GRASS((char)247, new Color(0, 217, 108), new Color(0, 140, 105)),
-	VALLEY_PORTAL((char)234, AsciiPanel.brightBlue, AsciiPanel.brightCyan),
+	VALLEY_GRASS('"', new Color(0, 217, 108), new Color(0, 140, 105)),
+	VALLEY_PORTAL((char)234, new Color(82, 123, 187), new Color(187, 82, 123)), //new Color(187, 82, 123), new Color(82, 123, 187))
 	VALLEY_FLOORBOARD((char)240, new Color(102, 82, 51), new Color(128, 102, 64)),
 
 	BOUNDS('?', AsciiPanel.brightBlack, AsciiPanel.black);
