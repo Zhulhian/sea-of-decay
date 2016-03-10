@@ -11,8 +11,24 @@ import java.awt.event.KeyEvent;
  * */
 public class PlayScreen implements Screen {
 
-	enum WorldType {
-		SEA_OF_DECAY, VALLEY
+	/** Width of the Sea of Decay map. */
+	public static final int SOD_WIDTH = 200;
+	/** Height of the Sea of Decay map. */
+	public static final int SOD_HEIGHT = 200;
+	/** Width of the Valley map. */
+	public static final int VALLEY_WIDTH = 200;
+	/** Height of the Valley map. */
+	public static final int VALLEY_HEIGHT = 130;
+	/** Width of the Abyss map. */
+	public static final int ABYSS_WIDTH = 25;
+	/** Height of the Abyss map. */
+	public static final int ABYSS_HEIGHT = 25;
+
+	public enum WorldType {
+		/** Sea of Decay world type */
+		SEA_OF_DECAY,
+		/** The Valley world type */
+		VALLEY
 	}
 
 	private World world;
@@ -47,18 +63,18 @@ public class PlayScreen implements Screen {
 
 		switch (worldType) {
 			case SEA_OF_DECAY:
-				world = new WorldBuilder(200, 200)
+				world = new WorldBuilder(SOD_WIDTH, SOD_HEIGHT)
 						.makeCaves()
 						.build();
 				break;
 			case VALLEY:
-				world = new WorldBuilder(200, 130)
+				world = new WorldBuilder(VALLEY_WIDTH, VALLEY_HEIGHT)
 						.makeValley()
 						.build();
 				break;
 			default:
 				// If the worldType is not found, create a 25 x 25 empty world.
-				world = new WorldBuilder(25, 25)
+				world = new WorldBuilder(ABYSS_WIDTH, ABYSS_HEIGHT)
 						.build();
 				break;
 		}
@@ -104,7 +120,7 @@ public class PlayScreen implements Screen {
 		int top = getScrollY();
 
 		displayTiles(terminal, left, top);
-		terminal.writeCenter(" - - press [ESC] to lose or [ENTER] to win - -", 80,
+		terminal.writeCenter(" - - press [ESC] to lose or [ENTER] to win - -", screenHeight - 10,
 				new Color(59, 164, 164), new Color(222, 11, 11));
 	}
 
@@ -121,6 +137,9 @@ public class PlayScreen implements Screen {
 
 			case KeyEvent.VK_T:
 				return new PlayScreen(WorldType.SEA_OF_DECAY);
+
+			case KeyEvent.VK_V:
+				return new PlayScreen(WorldType.VALLEY);
 
 			//      -  -  -    Movement    -  -  -       //
 

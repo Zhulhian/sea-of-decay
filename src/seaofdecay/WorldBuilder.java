@@ -4,6 +4,8 @@ import seaofdecay.screens.Screen;
 import seaofdecay.util.xpreader.XPChar;
 import seaofdecay.util.xpreader.XPFile;
 
+/** A class for creating worlds. Holds functions for generating
+ * the different world types. */
 public class WorldBuilder {
 	private int width;
 	private int height;
@@ -22,7 +24,9 @@ public class WorldBuilder {
 	private WorldBuilder randomizeTiles() {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				tiles[x][y] = Math.random() < 0.5 ? Tile.FUNGI_FLOOR : Tile.FUNGI_WALL;
+				// I don't think this constant is very magical. It is clear what
+				// the purpose of this is.
+				tiles[x][y] = Math.random() < 0.5 ? Tile.SOD_GROUND : Tile.SOD_WALL;
 			}
 		}
 		return this;
@@ -48,13 +52,13 @@ public class WorldBuilder {
 								continue;
 							}
 
-							if (tiles[x + ox][y + oy] == Tile.FUNGI_FLOOR)
+							if (tiles[x + ox][y + oy] == Tile.SOD_GROUND)
 								floorTiles++;
 							else
 								wallTiles++;
 						}
 					}
-					smoothedTiles[x][y] = floorTiles >= wallTiles ? Tile.FUNGI_FLOOR : Tile.FUNGI_WALL;
+					smoothedTiles[x][y] = floorTiles >= wallTiles ? Tile.SOD_GROUND : Tile.SOD_WALL;
 				}
 			}
 			tiles = smoothedTiles;

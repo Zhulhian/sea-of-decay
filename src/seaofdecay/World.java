@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/** World class. Holds functions and variables for a world.
+ * Has a list of the creatures, the tiles, and functions that
+ * modify the world - such as dig. */
 public class World {
 
     private Tile[][] tiles;
@@ -43,7 +46,7 @@ public class World {
 
     public void dig(int x, int y) {
         if (tile(x, y).isDiggable())
-            tiles[x][y] = Tile.FUNGI_FLOOR;
+            tiles[x][y] = Tile.SOD_GROUND;
     }
 
     public Creature creatureAt(int x, int y) {

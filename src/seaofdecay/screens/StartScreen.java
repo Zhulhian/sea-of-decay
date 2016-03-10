@@ -5,7 +5,7 @@ import seaofdecay.util.asciipanel.AsciiPanel;
 
 import java.awt.event.KeyEvent;
 
-
+/** The start screen. Displays a logo and waits for the user to press ENTER. */
 public class StartScreen implements Screen {
 
     public void displayOutput(AsciiPanel terminal) {

@@ -8,11 +8,14 @@ public class FungusAi extends CreatureAi {
 	 * and spreadCount is less than five, the fungus spreads (duplicates).
 	 * */
 	public static final double SPREAD_CHANCE = 0.01;
-	private CreatureFactory fungusFactory;
+	/** The diameter of the spread. New fungi will spawn within this / 2 of the mother fungus. */
+	public static final int SPREAD_DIAMETER = 10;
 	private int spreadCount;
 
-	public FungusAi(Creature creature, CreatureFactory factory) {
-		super(creature);
+	private CreatureFactory fungusFactory;
+
+	public FungusAi(CreatureFactory factory) {
+		//super(creature);
 		this.fungusFactory = factory;
 	}
 
@@ -21,13 +24,15 @@ public class FungusAi extends CreatureAi {
 			spread();
 	}
 
-	public void setSpreadCount(int newSpread) {
-		spreadCount = newSpread;
-	}
+//  Commented out for now. Might not use at all.
+//	public void setSpreadCount(int newSpread) {
+//		spreadCount = newSpread;
+//	}
+
 
 	private void spread() {
-		int x = creature.x + (int)(Math.random() * 11) - 5;
-		int y = creature.y + (int)(Math.random() * 11) - 5;
+		int x = creature.x + (int)(Math.random() * SPREAD_DIAMETER + 1) - SPREAD_DIAMETER / 2;
+		int y = creature.y + (int)(Math.random() * SPREAD_DIAMETER + 1) - SPREAD_DIAMETER / 2;
 
 		if (!creature.canEnter(x, y))
 			return;

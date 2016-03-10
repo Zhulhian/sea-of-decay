@@ -47,7 +47,7 @@ public class Creature {
 		Creature other = world.creatureAt(x+mx, y+my);
 
 		if (other == null)
-			ai.onEnter(x + mx, y + my, world.tile(x + mx, y + my));
+			ai.onEnter(, x + mx, y + my, world.tile(x + mx, y + my));
 		else
 			attack(other);
 	}

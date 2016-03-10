@@ -7,7 +7,7 @@ import seaofdecay.util.asciipanel.AsciiPanel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-
+/** The win screen. Will probably not be reached. Low priority. Just displays a message for now.*/
 public class WinScreen implements Screen {
 
     public void displayOutput(AsciiPanel terminal) {

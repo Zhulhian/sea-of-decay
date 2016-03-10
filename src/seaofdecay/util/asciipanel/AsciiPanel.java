@@ -18,7 +18,7 @@ public class AsciiPanel extends JPanel {
 	/**
 	 * The fgColor black (pure black).
 	 */
-	public static Color black = new Color(0, 0, 0);
+	public static final Color black = new Color(0, 0, 0);
 
 	/**
 	 * The fgColor red.
@@ -58,7 +58,7 @@ public class AsciiPanel extends JPanel {
 	/**
 	 * A brighter black (dark gray).
 	 */
-	public static Color brightBlack = new Color(128, 128, 128);
+	public static final Color brightBlack = new Color(128, 128, 128);
 
 	/**
 	 * A brighter red.
