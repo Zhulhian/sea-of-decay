@@ -14,8 +14,8 @@ public class FungusAi extends CreatureAi {
 
 	private CreatureFactory fungusFactory;
 
-	public FungusAi(CreatureFactory factory) {
-		//super(creature);
+	public FungusAi(CreatureFactory factory, Creature creature) {
+		super(creature);
 		this.fungusFactory = factory;
 	}
 

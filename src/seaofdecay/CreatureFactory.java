@@ -16,14 +16,14 @@ public class CreatureFactory {
 	public Creature newPlayer() {
 		Creature player = new Creature(world, PLAYER_CHAR, new Color(255, 73, 13));
 		world.addAtEmptyLocation(player);
-		player.setCreatureAi(new PlayerAi());
+		player.setCreatureAi(new PlayerAi(player));
 		return player;
 	}
 
 	public Creature newFungus() {
 		Creature fungus = new Creature(world, FUNGUS_CHAR, new Color(63, 249, 63));
 		world.addAtEmptyLocation(fungus);
-		new FungusAi(this);
+		fungus.setCreatureAi(new FungusAi(this, fungus));
 		return fungus;
 	}
 }
