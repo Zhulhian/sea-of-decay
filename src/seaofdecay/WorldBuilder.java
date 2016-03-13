@@ -71,21 +71,7 @@ public class WorldBuilder {
 		for (int x = 0; x < valley.layer(0).width; x++) {
 			for (int y = 0; y < valley.layer(0).height; y++) {
 				XPChar tile = valley.layer(0).data[x][y];
-				switch (tile.code) {
-					case '#':
-						tiles[x][y] = Tile.VALLEY_WALL;
-						break;
-					case (char)247:
-						tiles[x][y] = Tile.VALLEY_GRASS;
-						break;
-					case (char)234:
-						tiles[x][y] = Tile.VALLEY_PORTAL;
-						break;
-					case (char)240:
-						tiles[x][y] = Tile.VALLEY_FLOORBOARD;
-						break;
-					default: tiles[x][y] = Tile.BOUNDS; break;
-				}
+				tiles[x][y] = Tile.getTile(tile.code, WorldType.VALLEY);
 			}
 		}
 		return this;

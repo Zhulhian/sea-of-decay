@@ -1,7 +1,7 @@
 package seaofdecay.screens;
 
 import seaofdecay.ApplicationMain;
-import seaofdecay.screens.PlayScreen.WorldType;
+import seaofdecay.WorldType;
 import seaofdecay.util.asciipanel.AsciiPanel;
 
 import java.awt.*;

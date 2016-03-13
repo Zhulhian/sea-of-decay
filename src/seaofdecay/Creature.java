@@ -47,9 +47,21 @@ public class Creature {
 		Creature other = world.creatureAt(x+mx, y+my);
 
 		if (other == null)
-			ai.onEnter(x + mx, y + my, world.tile(x + mx, y + my));
+			ai.onEnter(x + mx, y + my, world.getTile(x + mx, y + my));
 		else
 			attack(other);
+	}
+
+	public void interact(int x, int y, Tile tile) {
+
+		/** Will expand with more interactable tiles. */
+		switch (tile) {
+			case VALLEY_DOOR_CLOSED:
+				world.dig(x, y);
+				world.setTile(x, y, Tile.VALLEY_DOOR_OPEN);
+				break;
+		}
+
 	}
 
 	public void update() {
@@ -65,7 +77,7 @@ public class Creature {
 	 * @param wx World X coordinate
 	 * @param wy World Y coordinate */
 	public boolean canEnter(int wx, int wy) {
-		return world.tile(wx, wy).isGround() &&
+		return world.getTile(wx, wy).isGround() &&
 				world.creatureAt(wx, wy) == null;
 	}
 

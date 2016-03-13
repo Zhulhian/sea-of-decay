@@ -24,13 +24,6 @@ public class PlayScreen implements Screen {
 	/** Height of the Abyss map. */
 	public static final int ABYSS_HEIGHT = 25;
 
-	public enum WorldType {
-		/** Sea of Decay world type */
-		SEA_OF_DECAY,
-		/** The Valley world type */
-		VALLEY
-	}
-
 	private World world;
 	private Creature player;
 
@@ -131,7 +124,7 @@ public class PlayScreen implements Screen {
 			case KeyEvent.VK_ESCAPE: return new LoseScreen();
 			case KeyEvent.VK_ENTER: return new WinScreen();
 			case KeyEvent.VK_P:
-				if (world.tile(player.x, player.y) == Tile.VALLEY_PORTAL)
+				if (world.getTile(player.x, player.y) == Tile.VALLEY_PORTAL)
 					return new PlayScreen(WorldType.SEA_OF_DECAY);
 				break;
 
