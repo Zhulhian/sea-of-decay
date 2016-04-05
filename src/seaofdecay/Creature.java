@@ -56,6 +56,8 @@ public class Creature {
 
 		/** Will expand with more interactable tiles. */
 		switch (tile) {
+			/** When interacting with a closed door, remove the door and replace it with
+			 * an open door tile - which you can walk through. */
 			case VALLEY_DOOR_CLOSED:
 				world.dig(x, y);
 				world.setTile(x, y, Tile.VALLEY_DOOR_OPEN);
