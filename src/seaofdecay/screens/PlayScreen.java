@@ -24,6 +24,9 @@ public class PlayScreen implements Screen {
 	/** Height of the Abyss map. */
 	public static final int ABYSS_HEIGHT = 25;
 
+	private static final int GUI_HEIGHT = 5;
+	private static final int GUI_WIDTH = 20;
+
 	private World world;
 	private Creature player;
 
@@ -107,14 +110,25 @@ public class PlayScreen implements Screen {
 		}
 	}
 
+	private void displayGUI(AsciiPanel terminal) {
+		terminal.setDefaultBackgroundColor(new Color(14, 31, 49));
+		for (int w = 2; w < GUI_WIDTH; w++) {
+			for (int h = 2; h < GUI_HEIGHT; h++) {
+				terminal.write(" ", w, h);
+			}
+		}
+	}
+
 	public void displayOutput(AsciiPanel terminal) {
 
 		int left = getScrollX();
 		int top = getScrollY();
 
 		displayTiles(terminal, left, top);
-		terminal.writeCenter(" - - press [ESC] to lose or [ENTER] to win - -", screenHeight - 10,
-				new Color(59, 164, 164), new Color(222, 11, 11));
+
+		displayGUI(terminal);
+		String stats = String.format("%3d/%3d hp", player.getHp(), player.getMaxHp());
+		terminal.write(stats, 3, 3, new Color(222, 136, 135));
 	}
 
 

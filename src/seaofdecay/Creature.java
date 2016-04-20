@@ -9,6 +9,22 @@ import java.awt.Color;
 public class Creature {
 	private World world;
 
+	/** The maximum amount of health. */
+	private int maxHp;
+	public int getMaxHp() {return maxHp;}
+
+	/** Current hp. */
+	private int hp;
+	public int getHp() {return hp;}
+
+	/** The attack value, used when attacking other creatures.*/
+	private int attackValue;
+	public int getAttackValue() {return attackValue;}
+
+	/** The defense value. */
+	private int defenseValue;
+	public int getDefenseValue() {return defenseValue;}
+
 	/** The X coordinate of the creature. */
 	public int x;
 	/** The Y coordinate of the creature. */
@@ -26,10 +42,14 @@ public class Creature {
 	// IntelliJ reports it as suspicious, but it obviously isn't.
 	public void setCreatureAi(CreatureAi ai) { this.ai = ai; }
 
-	public Creature(World world, char glyph, Color color) {
+	public Creature(World world, char glyph, Color color, int maxHp, int attackValue, int defenseValue) {
 		this.world = world;
 		this.glyph = glyph;
 		this.color = color;
+		this.maxHp = maxHp;
+		this.hp = maxHp;
+		this.attackValue = attackValue;
+		this.defenseValue = defenseValue;
 	}
 
 	/** Digs out the tile at the given x and y coordinates.
@@ -70,9 +90,23 @@ public class Creature {
 		ai.onUpdate();
 	}
 
-	/** Currently just removes the other creature. That is to say instakill!*/
+	/** Attacks another creature. Has an element of randomness. Uses modifyHp
+	 * function to decrease HP. Might seem like a very simple attack system, but
+	 * it's simple and it works well enough. I might extend it as a stretch goal.*/
 	public void attack(Creature other) {
-		world.remove(other);
+		int amount = Math.max(0, attackValue - other.getDefenseValue());
+
+		amount = (int)(Math.random() * amount) + 1;
+
+		other.modifyHp(-amount);
+	}
+
+	/** Convenient function as it can both be used for healing and dealing damage.*/
+	public void modifyHp(int amount) {
+		hp += amount;
+
+		if (hp < 1)
+			world.remove(this);
 	}
 
 	/** You can enter a tile if there is not creature there and the tile is a ground tile.
