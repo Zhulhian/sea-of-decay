@@ -23,6 +23,9 @@ public enum Tile {
 	VALLEY_DOOR_CLOSED((char)255, WorldType.VALLEY, new Color(108, 82, 51), new Color(77, 61, 38)),
 	VALLEY_DOOR_OPEN((char)254, WorldType.VALLEY, new Color(108, 82, 51), new Color(77, 61, 38)),
 
+	/** A tile not yet seen. */
+	UNKNOWN(' ', WorldType.ABYSS, AsciiPanel. white, AsciiPanel.white),
+
 	/** The tile for outside the maps/unknown tiles. */
 	BOUNDS('?', WorldType.ABYSS, AsciiPanel.brightBlack, AsciiPanel.black);
 
@@ -31,7 +34,7 @@ public enum Tile {
 	}
 
 	public boolean isInteractable() {
-		return this == VALLEY_DOOR_CLOSED;
+		return this == VALLEY_DOOR_CLOSED || this == VALLEY_DOOR_OPEN;
 	}
 
 	public boolean isGround() {

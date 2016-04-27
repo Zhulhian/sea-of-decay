@@ -5,6 +5,8 @@ import seaofdecay.util.asciipanel.AsciiPanel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Main screen. Handles the actual gameplay and displays the world.
@@ -27,6 +29,12 @@ public class PlayScreen implements Screen {
 	private static final int GUI_HEIGHT = 5;
 	private static final int GUI_WIDTH = 20;
 
+	/** List to hold all the status messages*/
+	private List<String> messages;
+
+	/** Field of View */
+	private FieldOfView fov;
+
 	private World world;
 	private Creature player;
 
@@ -38,18 +46,21 @@ public class PlayScreen implements Screen {
 	public PlayScreen(WorldType worldType) {
 		this.screenWidth = ApplicationMain.WIDTH;
 		this.screenHeight = ApplicationMain.HEIGHT;
+		this.messages = new ArrayList<>();
 		this.currentWorld = worldType;
 		createWorld(worldType);
+
+		this.fov = new FieldOfView(world);
 
 		CreatureFactory creatureFactory = new CreatureFactory(world);
 		createCreatures(creatureFactory);
 	}
 
 	private void createCreatures(CreatureFactory creatureFactory) {
-		player = creatureFactory.newPlayer();
+		player = creatureFactory.newPlayer(messages, fov);
 
 		if (currentWorld == WorldType.SEA_OF_DECAY) {
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 50; i++) {
 				creatureFactory.newFungus();
 			}
 		}
@@ -90,6 +101,8 @@ public class PlayScreen implements Screen {
 //    }
 
 	private void displayTiles(AsciiPanel terminal, int left, int top) {
+		fov.update(player.x, player.y, player.getVisionRadius());
+
 		terminal.setDefaultBackgroundColor(Screen.BGC);
 		for (int x = 0; x < screenWidth; x++) {
 			for (int y = 0; y < screenHeight; y++) {
@@ -97,15 +110,10 @@ public class PlayScreen implements Screen {
 				int wx = x + left;
 				int wy = y + top;
 
-				terminal.write(world.glyph(wx, wy), x, y, world.fgColor(wx, wy), world.bgColor(wx, wy));
-
-			}
-		}
-
-		for (Creature c : world.getCreatures()) {
-			if ((c.x >= left && c.x < left + screenWidth) &&
-					(c.y >= top && c.y < top + screenHeight)) {
-				terminal.write(c.getGlyph(), c.x - left, c.y - top, c.getColor(), world.bgColor(c.x , c.y));
+				if (player.canSee(wx, wy))
+						terminal.write(world.glyph(wx, wy), x, y, world.fgColor(wx, wy), world.bgColor(wx, wy));
+				else
+					terminal.write(fov.getTile(wx, wy).glyph(), x, y, Color.darkGray);
 			}
 		}
 	}
@@ -119,6 +127,23 @@ public class PlayScreen implements Screen {
 		}
 	}
 
+	private void displayMessages(AsciiPanel terminal, List<String> messages) {
+		int top = 3;
+
+		for (int x = 0; x < 60; x++) {
+			for (int y = 0; y < 7; y++) {
+				terminal.write(' ', 24 + x, 2 + y);
+			}
+		}
+
+		for (int i = 0; i < messages.size(); i++) {
+			terminal.write(messages.get(i), 25, top + i);
+		}
+		if (messages.size() > 4) {
+			messages.clear();
+		}
+	}
+
 	public void displayOutput(AsciiPanel terminal) {
 
 		int left = getScrollX();
@@ -127,6 +152,7 @@ public class PlayScreen implements Screen {
 		displayTiles(terminal, left, top);
 
 		displayGUI(terminal);
+		displayMessages(terminal, messages);
 		String stats = String.format("%3d/%3d hp", player.getHp(), player.getMaxHp());
 		terminal.write(stats, 3, 3, new Color(222, 136, 135));
 	}

@@ -1,10 +1,17 @@
 package seaofdecay;
 
+import java.util.List;
+
 /** The player AI. Handles what happens when walking into certain tiles, attacking, etc. */
 public class PlayerAi extends CreatureAi {
 
-	public PlayerAi(Creature creature) {
+	private List<String> messages;
+	private FieldOfView fov;
+
+	public PlayerAi(Creature creature, List<String> messages, FieldOfView fov) {
 		super(creature);
+		this.messages = messages;
+		this.fov = fov;
 	}
 
 	// override the onEnter function
@@ -18,4 +25,15 @@ public class PlayerAi extends CreatureAi {
 			creature.interact(x, y, tile);
 		}
 	}
+
+	public boolean canSee(int wx, int wy) {
+		return fov.isVisible(wx, wy);
+	}
+
+	// Instead of creating a getter for the message list I'll rely on
+	// constructor injection.
+	public void onNotify(String message) {
+		messages.add(message);
+	}
+
 }

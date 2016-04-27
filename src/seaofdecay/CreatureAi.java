@@ -13,7 +13,24 @@ public class CreatureAi {
 
     public void onEnter(int x, int y, Tile tile) { }
 
-    public void onUpdate() {
+    public void onUpdate() { }
 
-    }
+	/** Yes it is a complex expression, but calculating field of view is a complex operation. */
+	public boolean canSee(int wx, int wy) {
+		if ((creature.x - wx) * (creature.x - wx) + (creature.y - wy) * (creature.y - wy) >
+				creature.getVisionRadius() * creature.getVisionRadius()) {
+			return false;
+		}
+
+		for (Point p : new Line(creature.x, creature.y, wx, wy)) {
+			if (creature.getTile(p.x, p.y).isGround() || p.x == wx && p.y == wy)
+				continue;
+
+			return false;
+		}
+
+		return true;
+	}
+
+    public void onNotify(String message) {}
 }

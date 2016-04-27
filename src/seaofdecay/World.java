@@ -83,11 +83,13 @@ public class World {
 	}
 
 	public char glyph(int x, int y) {
-		return getTile(x,y).glyph();
+		Creature creature = creatureAt(x, y);
+		return creature != null ? creature.getGlyph() : getTile(x,y).glyph();
 	}
 
 	public Color fgColor(int x, int y) {
-		return getTile(x, y).fgColor();
+		Creature creature = creatureAt(x, y);
+		return creature != null ? creature.getColor() : getTile(x, y).fgColor();
 	}
 
 	public Color bgColor(int x, int y) {

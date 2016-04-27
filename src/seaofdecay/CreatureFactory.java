@@ -1,6 +1,7 @@
 package seaofdecay;
 
 import java.awt.*;
+import java.util.List;
 
 /** CreatureFactory for creating the different creatures and assigning their
  * AI to them. */
@@ -13,15 +14,15 @@ public class CreatureFactory {
 		this.world = world;
 	}
 
-	public Creature newPlayer() {
-		Creature player = new Creature(world, PLAYER_CHAR, new Color(255, 73, 13), 125, 15, 7 );
+	public Creature newPlayer(List<String> messages, FieldOfView fov) {
+		Creature player = new Creature(world, "player", PLAYER_CHAR, new Color(255, 73, 13), 125, 15, 7 );
 		world.addAtEmptyLocation(player);
-		player.setCreatureAi(new PlayerAi(player));
+		player.setCreatureAi(new PlayerAi(player, messages, fov));
 		return player;
 	}
 
 	public Creature newFungus() {
-		Creature fungus = new Creature(world, FUNGUS_CHAR, new Color(63, 249, 63), 8, 0, 1);
+		Creature fungus = new Creature(world, "fungus", FUNGUS_CHAR, new Color(63, 249, 63), 8, 0, 1);
 		world.addAtEmptyLocation(fungus);
 		/** I pass in the creaturefactory to the FungusAi constructor since it
 		 * uses the creaturefactory to create spawns. */

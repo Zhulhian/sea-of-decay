@@ -25,10 +25,17 @@ public class Creature {
 	private int defenseValue;
 	public int getDefenseValue() {return defenseValue;}
 
+	private int visionRadius;
+	public int getVisionRadius() { return visionRadius;}
+
 	/** The X coordinate of the creature. */
 	public int x;
 	/** The Y coordinate of the creature. */
 	public int y;
+
+	/** Name of the creature. */
+	private String name;
+	public String getName() { return name; }
 
 	/** The symbol/glyph of the creature. */
 	private char glyph;
@@ -42,14 +49,24 @@ public class Creature {
 	// IntelliJ reports it as suspicious, but it obviously isn't.
 	public void setCreatureAi(CreatureAi ai) { this.ai = ai; }
 
-	public Creature(World world, char glyph, Color color, int maxHp, int attackValue, int defenseValue) {
+	public Creature(World world, String name, char glyph, Color color, int maxHp, int attackValue, int defenseValue) {
 		this.world = world;
+		this.name = name;
 		this.glyph = glyph;
 		this.color = color;
 		this.maxHp = maxHp;
 		this.hp = maxHp;
 		this.attackValue = attackValue;
 		this.defenseValue = defenseValue;
+		this.visionRadius = 30;
+	}
+
+	public boolean canSee(int wx, int wy) {
+		return ai.canSee(wx, wy);
+	}
+
+	public Tile getTile(int wx, int wy) {
+		return world.getTile(wx, wy);
 	}
 
 	/** Digs out the tile at the given x and y coordinates.
@@ -57,6 +74,7 @@ public class Creature {
 	 * @param wy World Y coordinate */
 	public void dig(int wx, int wy) {
 		world.dig(wx, wy);
+
 	}
 
 	/** Relative move function. If there is a creature at current x + mx and current y + my,
@@ -81,9 +99,56 @@ public class Creature {
 			case VALLEY_DOOR_CLOSED:
 				world.dig(x, y);
 				world.setTile(x, y, Tile.VALLEY_DOOR_OPEN);
+				doAction("open the door");
+				break;
+			case VALLEY_DOOR_OPEN:
+				world.dig(x, y);
+				world.setTile(x, y, Tile.VALLEY_DOOR_CLOSED);
+				doAction("close the door");
 				break;
 		}
 
+	}
+
+	/** Add ability to format strings! Good for displaying variable values,
+	 * like damage done, HP recovered, etc. etc. */
+	public void notify(String message, Object ... params) {
+		ai.onNotify(String.format(message, params));
+	}
+	/** A function for notifying nearby creatures when a creature does something.
+	 * As in, if a creature breaks something, it will show up in the message log of
+	 * other nearby creatures. */
+	public void doAction(String message, Object ... params) {
+		/** The radius of which nearby creatures will notice the action
+		 * happening. */
+		int radius = 15;
+		for (int rx = -radius; rx < radius + 1; rx++) {
+			for (int ry = -radius; ry < radius + 1; ry++) {
+				if (rx * rx + ry * ry > radius * radius)
+					continue;
+
+				Creature other = world.creatureAt(x + rx, y + ry);
+
+				if (other == null)
+					continue;
+
+				if (other == this)
+					other.notify("You " + message + ".", params);
+				else if (other.canSee(x, y))
+					other.notify(String.format("The %s %s.", name, makeSecondPerson(message)), params);
+			}
+		}
+	}
+
+	/** Used for proper grammar in the status messages. */
+	private String makeSecondPerson(String message) {
+		int space = message.indexOf(" ");
+
+		if (space == -1) {
+			return message+"s";
+		} else {
+			return message.substring(0, space) + "s" + message.substring(space);
+		}
 	}
 
 	public void update() {
@@ -97,6 +162,9 @@ public class Creature {
 		int amount = Math.max(0, attackValue - other.getDefenseValue());
 
 		amount = (int)(Math.random() * amount) + 1;
+		//notify("You attack the %s for %d damage.", other.name, amount);
+		//other.notify("The %s attacks you for %d damage.", name, amount);
+		doAction("attack the %s for %d damage", other.name, amount);
 
 		other.modifyHp(-amount);
 	}
@@ -105,8 +173,10 @@ public class Creature {
 	public void modifyHp(int amount) {
 		hp += amount;
 
-		if (hp < 1)
+		if (hp < 1) {
+			doAction("die");
 			world.remove(this);
+		}
 	}
 
 	/** You can enter a tile if there is not creature there and the tile is a ground tile.
