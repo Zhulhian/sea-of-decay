@@ -14,6 +14,8 @@ import java.util.List;
  * */
 public class PlayScreen implements Screen {
 
+	private Screen subscreen;
+
 	/** Width of the Sea of Decay map. */
 	public static final int SOD_WIDTH = 170;
 	/** Height of the Sea of Decay map. */
@@ -54,7 +56,9 @@ public class PlayScreen implements Screen {
 		this.fov = new FieldOfView(world);
 
 		EntityFactory entityFactory = new EntityFactory(world);
+
 		createCreatures(entityFactory);
+		createItems(entityFactory);
 	}
 
 	private void createCreatures(EntityFactory entityFactory) {
@@ -67,12 +71,19 @@ public class PlayScreen implements Screen {
 			for (int i = 0; i < 40; i++) {
 				entityFactory.newMoth();
 			}
+		}
+	}
+
+	private void createItems(EntityFactory entityFactory) {
+
+		if (currentWorld == WorldType.SEA_OF_DECAY) {
 			for (int i = 0; i < world.width() * world.height() / 40; i++) {
 				if (Math.random() < 0.5)
 					entityFactory.newMushroom();
 				else
 					entityFactory.newSpore();
 			}
+			entityFactory.newVictoryItem();
 		}
 	}
 
@@ -81,7 +92,7 @@ public class PlayScreen implements Screen {
 		switch (worldType) {
 			case SEA_OF_DECAY:
 				world = new WorldBuilder(SOD_WIDTH, SOD_HEIGHT)
-						.makeCaves()
+						.makeSOD()
 						.build();
 				break;
 			case VALLEY:
@@ -165,68 +176,107 @@ public class PlayScreen implements Screen {
 		displayMessages(terminal, messages);
 		String stats = String.format("%3d/%3d hp", player.getHp(), player.getMaxHp());
 		terminal.write(stats, 3, 3, new Color(222, 136, 135));
+
+		if (subscreen != null)
+			subscreen.displayOutput(terminal);
 	}
 
 	public Screen respondToUserInput(KeyEvent key) {
-		switch (key.getKeyCode()) {
-			// Cheats
-			case KeyEvent.VK_ESCAPE: return new LoseScreen();
-			case KeyEvent.VK_ENTER: return new WinScreen();
+		if (subscreen != null) {
+			subscreen = subscreen.respondToUserInput(key);
+		} else {
+			switch (key.getKeyCode()) {
+				// Cheats
+				case KeyEvent.VK_ESCAPE:
+					return new LoseScreen();
+				case KeyEvent.VK_ENTER:
+					return new WinScreen();
 
-			case KeyEvent.VK_T:
-				return new PlayScreen(WorldType.SEA_OF_DECAY);
+				case KeyEvent.VK_T:
+					return new PlayScreen(WorldType.SEA_OF_DECAY);
 
-			case KeyEvent.VK_V:
-				return new PlayScreen(WorldType.VALLEY);
+				case KeyEvent.VK_V:
+					return new PlayScreen(WorldType.VALLEY);
 
-			//      -  -  -    Movement    -  -  -       //
+				//      -  -  -    Movement    -  -  -       //
 
-			// Left
-			case KeyEvent.VK_LEFT:
-			case KeyEvent.VK_H: player.moveBy(-1,  0); break;
+				// Left
+				case KeyEvent.VK_LEFT:
+				case KeyEvent.VK_H:
+					player.moveBy(-1, 0);
+					break;
 
-			// Right
-			case KeyEvent.VK_RIGHT:
-			case KeyEvent.VK_L: player.moveBy(1 ,  0); break;
+				// Right
+				case KeyEvent.VK_RIGHT:
+				case KeyEvent.VK_L:
+					player.moveBy(1, 0);
+					break;
 
-			// Up
-			case KeyEvent.VK_UP:
-			case KeyEvent.VK_K: player.moveBy(0 , -1); break;
+				// Up
+				case KeyEvent.VK_UP:
+				case KeyEvent.VK_K:
+					player.moveBy(0, -1);
+					break;
 
-			// Down
-			case KeyEvent.VK_DOWN:
-			case KeyEvent.VK_J: player.moveBy(0 ,  1); break;
+				// Down
+				case KeyEvent.VK_DOWN:
+				case KeyEvent.VK_J:
+					player.moveBy(0, 1);
+					break;
 
-			// Diagonals
-			case KeyEvent.VK_Y: player.moveBy(-1, -1);   break;
-			case KeyEvent.VK_U: player.moveBy(1 , -1);   break;
-			case KeyEvent.VK_B: player.moveBy(-1,  1);   break;
-			case KeyEvent.VK_N: player.moveBy(1 ,  1);   break;
+				// Diagonals
+				case KeyEvent.VK_Y:
+					player.moveBy(-1, -1);
+					break;
+				case KeyEvent.VK_U:
+					player.moveBy(1, -1);
+					break;
+				case KeyEvent.VK_B:
+					player.moveBy(-1, 1);
+					break;
+				case KeyEvent.VK_N:
+					player.moveBy(1, 1);
+					break;
 
-			//    -   -   -   ACTION   -   -   -    //
-			case KeyEvent.VK_C:
-				Point playerPos = new Point(player.x, player.y);
-				for (Point p : playerPos.neighbors8()) {
-					if (world.getTile(p.x, p.y) == Tile.VALLEY_DOOR_OPEN) {
-						world.dig(p.x, p.y);
-						world.setTile(p.x, p.y, Tile.VALLEY_DOOR_CLOSED);
-						player.doAction("close the door");
-						break;
+				//    -   -   -   ACTION   -   -   -    //
+				case KeyEvent.VK_C:
+					Point playerPos = new Point(player.x, player.y);
+					for (Point p : playerPos.neighbors8()) {
+						if (world.getTile(p.x, p.y) == Tile.VALLEY_DOOR_OPEN) {
+							world.dig(p.x, p.y);
+							world.setTile(p.x, p.y, Tile.VALLEY_DOOR_CLOSED);
+							player.doAction("close the door");
+							break;
+						}
 					}
-				}
-				break;
+					break;
 
-			case KeyEvent.VK_G:
-			case KeyEvent.VK_COMMA:
-				player.pickup(); break;
+				case KeyEvent.VK_D: subscreen = new DropScreen(player); break;
+
+				case KeyEvent.VK_G:
+				case KeyEvent.VK_COMMA:
+					player.pickup();
+					break;
 
 
+			}
 		}
+
 		if (world.getTile(player.x, player.y) == Tile.VALLEY_PORTAL) {
 			return new PlayScreen(WorldType.SEA_OF_DECAY);
 		}
 
-		world.update();
+		if (world.getTile(player.x, player.y) == Tile.SOD_PORTAL) {
+			for (Item item : player.getInventory().getItems()) {
+				if (item != null && item.getName().equals("Lanter of The Ohm"))
+					return new WinScreen();
+			}
+			return new PlayScreen(WorldType.ABYSS);
+		}
+
+		if (subscreen == null) {
+			world.update();
+		}
 
 		if (player.getHp() < 1) {
 			return new LoseScreen();

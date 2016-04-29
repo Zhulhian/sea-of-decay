@@ -66,6 +66,19 @@ public class WorldBuilder {
 		return this;
 	}
 
+	private WorldBuilder makeExitPortal() {
+		int x = -1;
+		int y = -1;
+
+		do {
+			x = (int)(Math.random() * width);
+			y = (int)(Math.random() * height);
+		} while (tiles[x][y] != Tile.SOD_GROUND);
+
+		tiles[x][y] = Tile.SOD_PORTAL;
+		return this;
+	}
+
 	public WorldBuilder makeValley() {
 		XPFile valley = Screen.RES_MGR.getRes("SoD_Valley.xp");
 		for (int x = 0; x < valley.layer(0).width; x++) {
@@ -77,7 +90,7 @@ public class WorldBuilder {
 		return this;
 	}
 
-	public WorldBuilder makeCaves() {
-		return randomizeTiles().smooth(8);
+	public WorldBuilder makeSOD() {
+		return randomizeTiles().smooth(8).makeExitPortal();
 	}
 }

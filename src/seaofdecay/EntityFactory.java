@@ -79,6 +79,10 @@ public class EntityFactory {
 		return spore;
 	}
 
-
+	public Item newVictoryItem() {
+		Item item = new Item((char)232, new Color(255,0,255), "Lantern of The Ohm");
+		world.addAtEmptyLocation(item);
+		return item;
+	}
 
 }
