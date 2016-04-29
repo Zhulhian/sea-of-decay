@@ -12,15 +12,15 @@ public class FungusAi extends CreatureAi {
 	public static final int SPREAD_DIAMETER = 10;
 	private int spreadCount;
 
-	private CreatureFactory fungusFactory;
+	private EntityFactory fungusFactory;
 
-	public FungusAi(CreatureFactory factory, Creature creature) {
+	public FungusAi(EntityFactory factory, Creature creature) {
 		super(creature);
 		this.fungusFactory = factory;
 	}
 
 	public void onUpdate() {
-		if (spreadCount < 5 && Math.random() < SPREAD_CHANCE)
+		if (fungusFactory.getFungusSpawned() < 100 && spreadCount < 2 && Math.random() < SPREAD_CHANCE)
 			spread();
 	}
 

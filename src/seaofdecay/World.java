@@ -11,6 +11,8 @@ public class World {
 
 	private Tile[][] tiles;
 
+	private Item[][] items;
+
 	private int width;
 	public int width() { return width; }
 
@@ -27,6 +29,8 @@ public class World {
 		this.width = tiles.length;
 		this.height = tiles[0].length;
 
+		this.items = new Item[width][height];
+
 		creatures = new ArrayList<>();
 	}
 
@@ -35,6 +39,11 @@ public class World {
 		for (Creature creature : toUpdate) {
 			creature.update();
 		}
+
+	}
+
+	public Item itemAt(int x, int y) {
+		return items[x][y];
 	}
 
 	public Tile getTile(int x, int y) {
@@ -68,7 +77,11 @@ public class World {
 		creatures.remove(target);
 	}
 
-	public void addAtEmptyLocation(Creature creature) {
+	public void remove(int x, int y) {
+		items[x][y] = null;
+	}
+
+	public boolean addAtEmptyLocation(Creature creature) {
 		int x;
 		int y;
 
@@ -80,16 +93,78 @@ public class World {
 		creature.x = x;
 		creature.y = y;
 		creatures.add(creature);
+
+		return true;
+	}
+
+	public boolean addAtEmptyLocation(Item item) {
+		int x;
+		int y;
+
+		do {
+			x = (int)(Math.random() * width);
+			y = (int)(Math.random() * height);
+		} while (!getTile(x, y).isGround() || itemAt(x, y) != null);
+
+		items[x][y] = item;
+
+		return true;
+	}
+
+	public boolean addAtEmptyLocation(Item item, int x, int y) {
+
+		List<Point> points = new ArrayList<>();
+		List<Point> checked = new ArrayList<>();
+
+		points.add(new Point(x,y));
+
+		while (!points.isEmpty()) {
+
+			Point p = points.remove(0);
+			checked.add(p);
+
+			if (!getTile(p.x, p.y).isGround())
+				continue;
+
+			if (items[p.x][p.y] == null) {
+				items[p.x][p.y] = item;
+				Creature c = this.creatureAt(p.x, p.y);
+				if (c != null)
+					c.notify("A %s lands at your feet.", item.getName());
+				return true;
+			} else {
+				List<Point> neighbors = p.neighbors8();
+				neighbors.removeAll(checked);
+				points.addAll(neighbors);
+			}
+		}
+		return false;
 	}
 
 	public char glyph(int x, int y) {
 		Creature creature = creatureAt(x, y);
-		return creature != null ? creature.getGlyph() : getTile(x,y).glyph();
+		Item item = itemAt(x, y);
+
+		if (creature != null)
+			return creature.getGlyph();
+
+		if (item != null)
+			return item.getGlyph();
+
+		return getTile(x, y).glyph();
 	}
 
 	public Color fgColor(int x, int y) {
 		Creature creature = creatureAt(x, y);
-		return creature != null ? creature.getColor() : getTile(x, y).fgColor();
+		Item item = itemAt(x, y);
+
+		if (creature != null)
+			return creature.getColor();
+
+		if (item != null)
+			return item.getColor();
+
+		return getTile(x,y).fgColor();
 	}
 
 	public Color bgColor(int x, int y) {

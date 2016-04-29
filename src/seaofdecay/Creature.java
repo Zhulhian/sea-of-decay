@@ -1,10 +1,12 @@
 package seaofdecay;
 
+import seaofdecay.screens.PlayScreen;
+
 import java.awt.Color;
 
 /**
- * General class for a creature. Holds X and Y coordinates, has functions
- * that every creature uses/can use such as move, dig, attack and canEnter.
+ * General class for a creatureAt. Holds X and Y coordinates, has functions
+ * that every creatureAt uses/can use such as move, dig, attack and canEnter.
  * */
 public class Creature {
 	private World world;
@@ -25,19 +27,23 @@ public class Creature {
 	private int defenseValue;
 	public int getDefenseValue() {return defenseValue;}
 
+	/** The creatures inventory. */
+	private Inventory inventory;
+	public Inventory getInventory() { return inventory; }
+
 	private int visionRadius;
 	public int getVisionRadius() { return visionRadius;}
 
-	/** The X coordinate of the creature. */
+	/** The X coordinate of the creatureAt. */
 	public int x;
-	/** The Y coordinate of the creature. */
+	/** The Y coordinate of the creatureAt. */
 	public int y;
 
-	/** Name of the creature. */
+	/** Name of the creatureAt. */
 	private String name;
 	public String getName() { return name; }
 
-	/** The symbol/glyph of the creature. */
+	/** The symbol/glyph of the creatureAt. */
 	private char glyph;
 	public char getGlyph() { return glyph; }
 
@@ -58,6 +64,7 @@ public class Creature {
 		this.hp = maxHp;
 		this.attackValue = attackValue;
 		this.defenseValue = defenseValue;
+		this.inventory = new Inventory(15);
 		this.visionRadius = 30;
 	}
 
@@ -77,11 +84,42 @@ public class Creature {
 
 	}
 
-	/** Relative move function. If there is a creature at current x + mx and current y + my,
+	public void pickup() {
+		Item item = world.itemAt(x, y);
+
+		if (inventory.isFull() || item == null) {
+			doAction("try to pick up the ground.");
+		} else {
+			doAction("pickup a %s", item.getName());
+			world.remove(x, y);
+			inventory.add(item);
+		}
+	}
+
+	public void drop(Item item) {
+		if (item == null) {
+			notify("You cannot drop that.");
+			return;
+		}
+		if (world.addAtEmptyLocation(item, x, y)) {
+			doAction("drop a " + item.getName());
+			inventory.remove(item);
+		} else {
+			notify("There's nowhere to drop the %s", item.getName());
+		}
+	}
+
+	/** Relative move function. If there is a creatureAt at current x + mx and current y + my,
 	 * attack it. Else, check what happens on entering the given tile.
 	 * @param mx relative x coordinate
 	 * @param my relative y coordinate */
 	public void moveBy(int mx, int my) {
+
+		/** Prevents the creatures from killing themselves if they stand still. Useful. */
+		if (mx == 0 && my == 0) {
+			return;
+		}
+
 		Creature other = world.creatureAt(x+mx, y+my);
 
 		if (other == null)
@@ -101,13 +139,13 @@ public class Creature {
 				world.setTile(x, y, Tile.VALLEY_DOOR_OPEN);
 				doAction("open the door");
 				break;
-			case VALLEY_DOOR_OPEN:
-				world.dig(x, y);
-				world.setTile(x, y, Tile.VALLEY_DOOR_CLOSED);
-				doAction("close the door");
-				break;
 		}
 
+	}
+
+	/** Useful for when creatures need to see what other creatures are in the world. */
+	public Creature creatureAt(int wx, int wy) {
+		return world.creatureAt(wx, wy);
 	}
 
 	/** Add ability to format strings! Good for displaying variable values,
@@ -115,8 +153,8 @@ public class Creature {
 	public void notify(String message, Object ... params) {
 		ai.onNotify(String.format(message, params));
 	}
-	/** A function for notifying nearby creatures when a creature does something.
-	 * As in, if a creature breaks something, it will show up in the message log of
+	/** A function for notifying nearby creatures when a creatureAt does something.
+	 * As in, if a creatureAt breaks something, it will show up in the message log of
 	 * other nearby creatures. */
 	public void doAction(String message, Object ... params) {
 		/** The radius of which nearby creatures will notice the action
@@ -155,18 +193,20 @@ public class Creature {
 		ai.onUpdate();
 	}
 
-	/** Attacks another creature. Has an element of randomness. Uses modifyHp
+	/** Attacks another creatureAt. Has an element of randomness. Uses modifyHp
 	 * function to decrease HP. Might seem like a very simple attack system, but
 	 * it's simple and it works well enough. I might extend it as a stretch goal.*/
 	public void attack(Creature other) {
+
 		int amount = Math.max(0, attackValue - other.getDefenseValue());
 
-		amount = (int)(Math.random() * amount) + 1;
+		amount = (int) (Math.random() * amount) + 1;
 		//notify("You attack the %s for %d damage.", other.name, amount);
 		//other.notify("The %s attacks you for %d damage.", name, amount);
 		doAction("attack the %s for %d damage", other.name, amount);
 
 		other.modifyHp(-amount);
+
 	}
 
 	/** Convenient function as it can both be used for healing and dealing damage.*/
@@ -179,7 +219,7 @@ public class Creature {
 		}
 	}
 
-	/** You can enter a tile if there is not creature there and the tile is a ground tile.
+	/** You can enter a tile if there is not creatureAt there and the tile is a ground tile.
 	 * @param wx World X coordinate
 	 * @param wy World Y coordinate */
 	public boolean canEnter(int wx, int wy) {

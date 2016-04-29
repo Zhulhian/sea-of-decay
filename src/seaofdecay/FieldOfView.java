@@ -1,7 +1,7 @@
 package seaofdecay;
 
 /**
- * Created by dan on 27-Apr-16.
+ * Class for hadnling the field of view.
  */
 public class FieldOfView {
 	private World world;
@@ -45,7 +45,7 @@ public class FieldOfView {
 					visible[p.x][p.y] = true;
 					tiles[p.x][p.y] = tile;
 
-					if (!tile.isGround())
+					if (!tile.isSeeThrough())
 						break;
 				}
 			}

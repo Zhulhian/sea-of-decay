@@ -1,6 +1,7 @@
 package seaofdecay.screens;
 
 import seaofdecay.*;
+import seaofdecay.Point;
 import seaofdecay.util.asciipanel.AsciiPanel;
 
 import java.awt.*;
@@ -14,9 +15,9 @@ import java.util.List;
 public class PlayScreen implements Screen {
 
 	/** Width of the Sea of Decay map. */
-	public static final int SOD_WIDTH = 200;
+	public static final int SOD_WIDTH = 170;
 	/** Height of the Sea of Decay map. */
-	public static final int SOD_HEIGHT = 200;
+	public static final int SOD_HEIGHT = 160;
 	/** Width of the Valley map. */
 	public static final int VALLEY_WIDTH = 200;
 	/** Height of the Valley map. */
@@ -52,16 +53,25 @@ public class PlayScreen implements Screen {
 
 		this.fov = new FieldOfView(world);
 
-		CreatureFactory creatureFactory = new CreatureFactory(world);
-		createCreatures(creatureFactory);
+		EntityFactory entityFactory = new EntityFactory(world);
+		createCreatures(entityFactory);
 	}
 
-	private void createCreatures(CreatureFactory creatureFactory) {
-		player = creatureFactory.newPlayer(messages, fov);
+	private void createCreatures(EntityFactory entityFactory) {
+		player = entityFactory.newPlayer(messages, fov);
 
 		if (currentWorld == WorldType.SEA_OF_DECAY) {
-			for (int i = 0; i < 50; i++) {
-				creatureFactory.newFungus();
+			for (int i = 0; i < 20; i++) {
+				entityFactory.newFungus();
+			}
+			for (int i = 0; i < 40; i++) {
+				entityFactory.newMoth();
+			}
+			for (int i = 0; i < world.width() * world.height() / 40; i++) {
+				if (Math.random() < 0.5)
+					entityFactory.newMushroom();
+				else
+					entityFactory.newSpore();
 			}
 		}
 	}
@@ -157,16 +167,11 @@ public class PlayScreen implements Screen {
 		terminal.write(stats, 3, 3, new Color(222, 136, 135));
 	}
 
-
 	public Screen respondToUserInput(KeyEvent key) {
 		switch (key.getKeyCode()) {
 			// Cheats
 			case KeyEvent.VK_ESCAPE: return new LoseScreen();
 			case KeyEvent.VK_ENTER: return new WinScreen();
-			case KeyEvent.VK_P:
-				if (world.getTile(player.x, player.y) == Tile.VALLEY_PORTAL)
-					return new PlayScreen(WorldType.SEA_OF_DECAY);
-				break;
 
 			case KeyEvent.VK_T:
 				return new PlayScreen(WorldType.SEA_OF_DECAY);
@@ -198,9 +203,34 @@ public class PlayScreen implements Screen {
 			case KeyEvent.VK_B: player.moveBy(-1,  1);   break;
 			case KeyEvent.VK_N: player.moveBy(1 ,  1);   break;
 
+			//    -   -   -   ACTION   -   -   -    //
+			case KeyEvent.VK_C:
+				Point playerPos = new Point(player.x, player.y);
+				for (Point p : playerPos.neighbors8()) {
+					if (world.getTile(p.x, p.y) == Tile.VALLEY_DOOR_OPEN) {
+						world.dig(p.x, p.y);
+						world.setTile(p.x, p.y, Tile.VALLEY_DOOR_CLOSED);
+						player.doAction("close the door");
+						break;
+					}
+				}
+				break;
+
+			case KeyEvent.VK_G:
+			case KeyEvent.VK_COMMA:
+				player.pickup(); break;
+
+
+		}
+		if (world.getTile(player.x, player.y) == Tile.VALLEY_PORTAL) {
+			return new PlayScreen(WorldType.SEA_OF_DECAY);
 		}
 
 		world.update();
+
+		if (player.getHp() < 1) {
+			return new LoseScreen();
+		}
 
 		return this;
 	}

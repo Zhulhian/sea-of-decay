@@ -8,10 +8,29 @@ public class CreatureAi {
 
     public CreatureAi(Creature creature) {
         this.creature = creature;
-        //this.creature.setCreatureAi(this);
+        //this.creatureAt.setCreatureAi(this);
     }
 
-    public void onEnter(int x, int y, Tile tile) { }
+    public void onEnter(int x, int y, Tile tile) {
+	    if (tile.isGround()) {
+		    creature.x = x;
+		    creature.y = y;
+	    } else {
+		    creature.doAction("bump into a wall");
+	    }
+    }
+
+	public void wander() {
+		int mx = (int)(Math.random() * 3) - 1;
+		int my = (int)(Math.random() * 3) - 1;
+
+		Creature other = creature.creatureAt(creature.x + mx, creature.y + my);
+
+		if (other != null && other.getGlyph() == creature.getGlyph())
+			return;
+		else
+		creature.moveBy(mx, my);
+	}
 
     public void onUpdate() { }
 
