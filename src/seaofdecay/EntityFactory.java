@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.List;
 
 /** EntityFactory for creating the different creatures and assigning their
- * AI to them. */
+ * AI to them as well as creating the items in the world.  */
 public class EntityFactory {
 	private final static char FUNGUS_CHAR = 145;
 	private final static char PLAYER_CHAR = '@';
@@ -63,6 +63,18 @@ public class EntityFactory {
 
 		return fungus;
 
+	}
+
+	public Creature newNuclearKnight() {
+		int knightHP = 80;
+		int knightATK = 30;
+		int knightDEF = 20;
+
+		Creature knight = new Creature(world, "nuclear knight", 'N', new Color(246, 255, 0), knightHP, knightATK, knightDEF);
+
+		world.addAtEmptyLocation(knight);
+
+		return knight;
 	}
 
 	/**   -  -  -   Items   -  -  -   **/

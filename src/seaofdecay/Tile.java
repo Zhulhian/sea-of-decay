@@ -8,9 +8,9 @@ import seaofdecay.util.asciipanel.AsciiPanel;
 public enum Tile {
 	/**  -  -  SEA OF DECAY TILES  -  -  **/
 	/** The Sea of Decay ground tile */
-	SOD_GROUND((char)34, WorldType.SEA_OF_DECAY, true, true, new Color(152, 193, 193), new Color(34, 72, 72)), //34
+	SOD_GROUND((char)34, WorldType.SEA_OF_DECAY, true, true, new Color(152, 193, 193), new Color(34, 72, 72)),
 	/** The Sea of Decay wall tile */
-	SOD_WALL((char)6, WorldType.SEA_OF_DECAY, false, false, new Color(34, 102, 102), new Color(152, 193, 193)), // 158 is good as well.
+	SOD_WALL((char)6, WorldType.SEA_OF_DECAY, false, false, new Color(34, 102, 102), new Color(152, 193, 193)),
 	/** Exit Portal SOD */
 	SOD_PORTAL((char)234, WorldType.SEA_OF_DECAY, true, true, new Color(50, 60, 230), new Color(100, 80, 250)),
 
@@ -73,7 +73,7 @@ public enum Tile {
 	}
 
 	/** If true, player can see through the tile. */
-	public final boolean transparent;
+	private final boolean transparent;
 
 	public final boolean isSeeThrough() {
 		return transparent;

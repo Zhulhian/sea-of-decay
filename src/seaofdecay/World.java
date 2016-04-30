@@ -88,7 +88,8 @@ public class World {
 		do {
 			x = (int)(Math.random() * width);
 			y = (int)(Math.random() * height);
-		} while (!getTile(x,y).isGround() || creatureAt(x, y) != null);
+		} while (creatureAt(x, y) != null ||
+				!getTile(x,y).isGround());
 
 		creature.x = x;
 		creature.y = y;

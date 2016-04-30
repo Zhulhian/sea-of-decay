@@ -100,6 +100,11 @@ public class PlayScreen implements Screen {
 						.makeValley()
 						.build();
 				break;
+			case ABYSS:
+				world = new WorldBuilder(ABYSS_WIDTH, ABYSS_HEIGHT)
+					.makeAbyss()
+					.build();
+				break;
 			default:
 				// If the worldType is not found, create a 25 x 25 empty world.
 				world = new WorldBuilder(ABYSS_WIDTH, ABYSS_HEIGHT)
@@ -271,7 +276,7 @@ public class PlayScreen implements Screen {
 
 		if (world.getTile(player.x, player.y) == Tile.SOD_PORTAL) {
 			for (Item item : player.getInventory().getItems()) {
-				if (item != null && item.getName().equals("Lanter of The Ohm"))
+				if (item != null && item.getName().equals("Lantern of The Ohm"))
 					return new WinScreen();
 			}
 			return new PlayScreen(WorldType.ABYSS);

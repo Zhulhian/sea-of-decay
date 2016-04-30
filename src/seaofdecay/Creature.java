@@ -10,7 +10,7 @@ import java.awt.Color;
  * */
 public class Creature {
 	/** How far the creatures can see. */
-	public static final int VISION_RANGE = 100;
+	public static final int VISION_RANGE = 30;
 	public static final int INV_SIZE = 15;
 	private World world;
 
