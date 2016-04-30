@@ -47,6 +47,11 @@ public enum Tile {
 	/** The Valley - window tile. */
 	VALLEY_WINDOW((char)8, WorldType.VALLEY, true, false, new Color(255, 217, 102), new Color(102, 178, 255)),
 
+	/** Abyss Ground */
+	ABYSS_GROUND((char)176, WorldType.ABYSS, true, true, new Color(0, 70, 140), new Color(0, 32, 64)),
+	/** Abyss Wall*/
+	ABYSS_WALL((char)234, WorldType.ABYSS, false, false, new Color(0, 70, 140), new Color(0, 32, 64)),
+
 	/** A tile not yet seen. */
 	UNKNOWN(' ', WorldType.ABYSS, true, true, new Color (255, 255, 255), new Color (255, 255, 255)),
 

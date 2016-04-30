@@ -32,9 +32,22 @@ public class WorldBuilder {
 		return this;
 	}
 
+	private WorldBuilder abyssChaos() {
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				tiles[x][y] = Math.random() < 0.2 ? Tile.ABYSS_WALL : Tile.ABYSS_GROUND;
+			}
+		}
+		return this;
+	}
+
+	private WorldBuilder makeAbyss() {
+		return abyssChaos();
+	}
+
 	private WorldBuilder smooth(int times) {
 
-		// So many nested for-loops... *cries a little bit*
+		// So many nested for-loops... Good thing it is only run once.
 
 		Tile[][] smoothedTiles = new Tile[width][height];
 		for (int time = 0; time < times; time++) {

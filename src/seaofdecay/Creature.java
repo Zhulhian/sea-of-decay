@@ -9,6 +9,9 @@ import java.awt.Color;
  * that every creatureAt uses/can use such as move, dig, attack and canEnter.
  * */
 public class Creature {
+	/** How far the creatures can see. */
+	public static final int VISION_RANGE = 100;
+	public static final int INV_SIZE = 15;
 	private World world;
 
 	/** The maximum amount of health. */
@@ -64,8 +67,8 @@ public class Creature {
 		this.hp = maxHp;
 		this.attackValue = attackValue;
 		this.defenseValue = defenseValue;
-		this.inventory = new Inventory(15);
-		this.visionRadius = 30;
+		this.inventory = new Inventory(INV_SIZE);
+		this.visionRadius = VISION_RANGE;
 	}
 
 	public boolean canSee(int wx, int wy) {

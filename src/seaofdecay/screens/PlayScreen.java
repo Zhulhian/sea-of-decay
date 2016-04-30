@@ -25,9 +25,9 @@ public class PlayScreen implements Screen {
 	/** Height of the Valley map. */
 	public static final int VALLEY_HEIGHT = 130;
 	/** Width of the Abyss map. */
-	public static final int ABYSS_WIDTH = 25;
+	public static final int ABYSS_WIDTH = 200;
 	/** Height of the Abyss map. */
-	public static final int ABYSS_HEIGHT = 25;
+	public static final int ABYSS_HEIGHT = 200;
 
 	private static final int GUI_HEIGHT = 5;
 	private static final int GUI_WIDTH = 20;
@@ -197,6 +197,9 @@ public class PlayScreen implements Screen {
 
 				case KeyEvent.VK_V:
 					return new PlayScreen(WorldType.VALLEY);
+
+				case KeyEvent.VK_A:
+					return new PlayScreen(WorldType.ABYSS);
 
 				//      -  -  -    Movement    -  -  -       //
 
