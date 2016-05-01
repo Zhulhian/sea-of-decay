@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.StringJoiner;
 
+import seaofdecay.ApplicationMain;
 import seaofdecay.Creature;
 import seaofdecay.Item;
 import seaofdecay.util.asciipanel.AsciiPanel;
@@ -14,6 +15,8 @@ import seaofdecay.util.asciipanel.AsciiPanel;
  */
 public abstract class InventoryBasedScreen implements Screen {
 
+	public static final int INV_Y = 15;
+	public static final int INV_WIDTH = 20;
 	protected Creature player;
 	private String letters;
 
@@ -29,18 +32,20 @@ public abstract class InventoryBasedScreen implements Screen {
 	public void displayOutput(AsciiPanel terminal) {
 		ArrayList<String> lines = getList();
 
-		int y = 18 - lines.size();
-		int x = 4;
+		int y = INV_Y;
+		int x = 2;
 
-		if (lines.size() > 0)
-			terminal.clear(' ', x, y, 20, lines.size());
+		terminal.clear(' ', x, y, INV_WIDTH, Creature.INV_SIZE, AsciiPanel.blue, AsciiPanel.blue);
 
 		for (String line : lines) {
-			terminal.write(line, x, y++);
+			terminal.write(line, x, y, AsciiPanel.brightYellow, AsciiPanel.blue);
+			y++;
+
 		}
 
-		terminal.clear(' ', 0, 18, 80, 1);
-		terminal.write("What would you like to " + getVerb() + "?", 2, 18);
+
+		terminal.clear(' ', x - 1, y - 2, 30, 1, AsciiPanel.brightBlack, AsciiPanel.brightBlack);
+		terminal.write("What would you like to " + getVerb() + "?", x, y - 2, AsciiPanel.brightYellow, AsciiPanel.brightBlack);
 
 		terminal.repaint();
 	}

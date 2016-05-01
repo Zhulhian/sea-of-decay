@@ -25,9 +25,9 @@ public class PlayScreen implements Screen {
 	/** Height of the Valley map. */
 	public static final int VALLEY_HEIGHT = 130;
 	/** Width of the Abyss map. */
-	public static final int ABYSS_WIDTH = 200;
+	public static final int ABYSS_WIDTH = 300;
 	/** Height of the Abyss map. */
-	public static final int ABYSS_HEIGHT = 200;
+	public static final int ABYSS_HEIGHT = 300;
 
 	private static final int GUI_HEIGHT = 5;
 	private static final int GUI_WIDTH = 20;
@@ -151,6 +151,8 @@ public class PlayScreen implements Screen {
 				terminal.write(" ", w, h);
 			}
 		}
+		String stats = String.format("%3d/%3d hp", player.getHp(), player.getMaxHp());
+		terminal.write(stats, 3, 3, new Color(222, 136, 135));
 	}
 
 	private void displayMessages(AsciiPanel terminal, List<String> messages) {
@@ -179,8 +181,6 @@ public class PlayScreen implements Screen {
 
 		displayGUI(terminal);
 		displayMessages(terminal, messages);
-		String stats = String.format("%3d/%3d hp", player.getHp(), player.getMaxHp());
-		terminal.write(stats, 3, 3, new Color(222, 136, 135));
 
 		if (subscreen != null)
 			subscreen.displayOutput(terminal);
@@ -259,8 +259,10 @@ public class PlayScreen implements Screen {
 					}
 					break;
 
+				/** Drop item. */
 				case KeyEvent.VK_D: subscreen = new DropScreen(player); break;
 
+				/** Pick up item. */
 				case KeyEvent.VK_G:
 				case KeyEvent.VK_COMMA:
 					player.pickup();
