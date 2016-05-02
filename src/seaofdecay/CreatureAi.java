@@ -8,7 +8,6 @@ public class CreatureAi {
 
     public CreatureAi(Creature creature) {
         this.creature = creature;
-        //this.creatureAt.setCreatureAi(this);
     }
 
     public void onEnter(int x, int y, Tile tile) {
@@ -26,10 +25,13 @@ public class CreatureAi {
 
 		Creature other = creature.creatureAt(creature.x + mx, creature.y + my);
 
-		if (other != null && other.getGlyph() == creature.getGlyph())
+		if (other != null && other.getGlyph() == creature.getGlyph()) {
+			/** It is not unecessary if I want to end execution early. */
 			return;
-		else
-		creature.moveBy(mx, my);
+		}
+		else {
+			creature.moveBy(mx, my);
+		}
 	}
 
     public void onUpdate() { }

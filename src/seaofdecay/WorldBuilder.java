@@ -79,10 +79,10 @@ public class WorldBuilder {
 	}
 
 	private WorldBuilder makeVictoryPortal(int n) {
-		int x;
-		int y;
 
 		for (int i = 0; i < n; i++) {
+			int x;
+			int y;
 			do {
 				x = (int) (Math.random() * width);
 				y = (int) (Math.random() * height);

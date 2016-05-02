@@ -68,6 +68,7 @@ public enum Tile {
 
 	private final boolean isGround;
 
+	/** I do not see how this is suspicious. */
 	public boolean isGround() {
 		return isGround;
 	}
@@ -75,6 +76,7 @@ public enum Tile {
 	/** If true, player can see through the tile. */
 	private final boolean transparent;
 
+	/** I understand why the inspection algorithm finds it suspicious, but we humans know it isnt. */
 	public final boolean isSeeThrough() {
 		return transparent;
 	}

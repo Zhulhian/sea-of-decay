@@ -1,5 +1,7 @@
 package seaofdecay;
 
+import java.util.Objects;
+
 /**
  * Created by dan on 29-Apr-16.
  */
@@ -7,6 +9,7 @@ public class Inventory {
 
 	private Item[] items;
 	public Item[] getItems() { return items; }
+	/** Not used now, but might be useful for future. */
 	public Item get(int i) { return items[i]; }
 
 	public Inventory(int max) {
@@ -24,7 +27,7 @@ public class Inventory {
 
 	public void remove(Item item) {
 		for (int i = 0; i < items.length; i++) {
-			if (items[i] == item) {
+			if (Objects.equals(items[i], item)) {
 				items[i] = null;
 				return;
 			}
@@ -33,8 +36,8 @@ public class Inventory {
 
 	public boolean isFull() {
 		int size = 0;
-		for (int i = 0; i < items.length; i++) {
-			if (items[i] != null)
+		for (Item item : items) {
+			if (item != null)
 				size++;
 		}
 		return size == items.length;

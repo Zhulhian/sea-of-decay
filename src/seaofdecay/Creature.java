@@ -1,8 +1,7 @@
 package seaofdecay;
 
-import seaofdecay.screens.PlayScreen;
-
 import java.awt.Color;
+import java.util.Objects;
 
 /**
  * General class for a creatureAt. Holds X and Y coordinates, has functions
@@ -11,7 +10,10 @@ import java.awt.Color;
 public class Creature {
 	/** How far the creatures can see. */
 	public static final int VISION_RANGE = 30;
+	/** Inventory size */
 	public static final int INV_SIZE = 15;
+	/** The radius of which other creatures will be notified of something this creature does. */
+	public static final int MSG_NOTIFICATION_RADIUS = 15;
 	private World world;
 
 	/** The maximum amount of health. */
@@ -24,6 +26,7 @@ public class Creature {
 
 	/** The attack value, used when attacking other creatures.*/
 	private int attackValue;
+	/** Not used now, but might be useful for future. */
 	public int getAttackValue() {return attackValue;}
 
 	/** The defense value. */
@@ -44,6 +47,7 @@ public class Creature {
 
 	/** Name of the creatureAt. */
 	private String name;
+	/** Not used now, but might be useful for future. */
 	public String getName() { return name; }
 
 	/** The symbol/glyph of the creatureAt. */
@@ -55,7 +59,7 @@ public class Creature {
 	public Color getColor() { return color; }
 
 	private CreatureAi ai = null;
-	// IntelliJ reports it as suspicious, but it obviously isn't.
+	/** Is it really that suspicious? */
 	public void setCreatureAi(CreatureAi ai) { this.ai = ai; }
 
 	public Creature(World world, String name, char glyph, Color color, int maxHp, int attackValue, int defenseValue) {
@@ -133,7 +137,8 @@ public class Creature {
 
 	public void interact(int x, int y, Tile tile) {
 
-		/** Will expand with more interactable tiles. */
+		/** Will expand with more interactable tiles. I realise I miss tiles, but that is entirely
+		 * conciously. With only one tile an if-statement would be better, but I will expand with more later. */
 		switch (tile) {
 			/** When interacting with a closed door, remove the door and replace it with
 			 * an open door tile - which you can walk through. */
@@ -162,7 +167,7 @@ public class Creature {
 	public void doAction(String message, Object ... params) {
 		/** The radius of which nearby creatures will notice the action
 		 * happening. */
-		int radius = 15;
+		int radius = MSG_NOTIFICATION_RADIUS;
 		for (int rx = -radius; rx < radius + 1; rx++) {
 			for (int ry = -radius; ry < radius + 1; ry++) {
 				if (rx * rx + ry * ry > radius * radius)
@@ -173,7 +178,7 @@ public class Creature {
 				if (other == null)
 					continue;
 
-				if (other == this)
+				if (Objects.equals(other, this))
 					other.notify("You " + message + ".", params);
 				else if (other.canSee(x, y))
 					other.notify(String.format("The %s %s.", name, makeSecondPerson(message)), params);
@@ -201,7 +206,7 @@ public class Creature {
 	 * it's simple and it works well enough. I might extend it as a stretch goal.*/
 	public void attack(Creature other) {
 
-		int amount = Math.max(0, attackValue - other.getDefenseValue());
+		int amount = Math.max(0, attackValue - other.defenseValue);
 
 		amount = (int) (Math.random() * amount) + 1;
 		//notify("You attack the %s for %d damage.", other.name, amount);

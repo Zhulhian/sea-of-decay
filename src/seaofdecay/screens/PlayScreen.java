@@ -14,7 +14,23 @@ import java.util.List;
  * */
 public class PlayScreen implements Screen {
 
-	private Screen subscreen;
+	/** Number of fungi */
+	public static final int NO_OF_FUNGI = 20;
+	/** Number of moths */
+	public static final int NO_OF_MOTHS = 40;
+	/** How many mushrooms there are for every spore */
+	public static final double ITEM_RATIO = 0.5;
+	/** Number of items in the SoD world.  */
+	public static final int ITEM_AMOUNT = 600;
+	/** Width of message log */
+	public static final int MSG_LOG_WIDTH = 60;
+	/** Height of message log */
+	public static final int MSG_LOG_HEIGHT = 7;
+	/** X pos of message log */
+	public static final int MSG_LOG_X = 24;
+	/** Y pos of message log */
+	public static final int MSG_LOG_Y = 2;
+	private Screen subscreen = null;
 
 	/** Width of the Sea of Decay map. */
 	public static final int SOD_WIDTH = 170;
@@ -65,10 +81,10 @@ public class PlayScreen implements Screen {
 		player = entityFactory.newPlayer(messages, fov);
 
 		if (currentWorld == WorldType.SEA_OF_DECAY) {
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < NO_OF_FUNGI; i++) {
 				entityFactory.newFungus();
 			}
-			for (int i = 0; i < 40; i++) {
+			for (int i = 0; i < NO_OF_MOTHS; i++) {
 				entityFactory.newMoth();
 			}
 		}
@@ -77,8 +93,8 @@ public class PlayScreen implements Screen {
 	private void createItems(EntityFactory entityFactory) {
 
 		if (currentWorld == WorldType.SEA_OF_DECAY) {
-			for (int i = 0; i < world.width() * world.height() / 40; i++) {
-				if (Math.random() < 0.5)
+			for (int i = 0; i < ITEM_AMOUNT; i++) {
+				if (Math.random() < ITEM_RATIO)
 					entityFactory.newMushroom();
 				else
 					entityFactory.newSpore();
@@ -156,16 +172,14 @@ public class PlayScreen implements Screen {
 	}
 
 	private void displayMessages(AsciiPanel terminal, List<String> messages) {
-		int top = 3;
-
-		for (int x = 0; x < 60; x++) {
-			for (int y = 0; y < 7; y++) {
-				terminal.write(' ', 24 + x, 2 + y);
+		for (int x = 0; x < MSG_LOG_WIDTH; x++) {
+			for (int y = 0; y < MSG_LOG_HEIGHT; y++) {
+				terminal.write(' ', MSG_LOG_X + x, MSG_LOG_Y + y);
 			}
 		}
 
 		for (int i = 0; i < messages.size(); i++) {
-			terminal.write(messages.get(i), 25, top + i);
+			terminal.write(messages.get(i), MSG_LOG_X + 1, MSG_LOG_Y + 1 + i);
 		}
 		if (messages.size() > 4) {
 			messages.clear();
@@ -186,6 +200,8 @@ public class PlayScreen implements Screen {
 			subscreen.displayOutput(terminal);
 	}
 
+	/** Not sure what to do here. It says it might be difficult to understand, but looking at the function you
+	 * can clearly see what it does. */
 	public Screen respondToUserInput(KeyEvent key) {
 		if (subscreen != null) {
 			subscreen = subscreen.respondToUserInput(key);

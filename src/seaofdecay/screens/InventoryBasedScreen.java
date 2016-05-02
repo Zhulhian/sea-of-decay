@@ -2,9 +2,8 @@ package seaofdecay.screens;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.StringJoiner;
+import java.util.Collection;
 
-import seaofdecay.ApplicationMain;
 import seaofdecay.Creature;
 import seaofdecay.Item;
 import seaofdecay.util.asciipanel.AsciiPanel;
@@ -15,43 +14,49 @@ import seaofdecay.util.asciipanel.AsciiPanel;
  */
 public abstract class InventoryBasedScreen implements Screen {
 
+	/** Inventory Y position */
 	public static final int INV_Y = 15;
+	/** Inventory width */
 	public static final int INV_WIDTH = 20;
+	/** Query width, asks what item you want to do something with. */
+	public static final int QUERY_WIDTH = 30;
 	protected Creature player;
 	private String letters;
 
 	protected abstract String getVerb();
+	/** Isn't used right now, except for DropScreen where it returns true, but it will be used for future
+	 * extensions. */
 	protected abstract boolean isAcceptable(Item item);
 	protected abstract Screen use(Item item);
 
-	public InventoryBasedScreen(Creature player) {
+	protected InventoryBasedScreen(Creature player) {
 		this.player = player;
 		this.letters = "abcdefghijklmnopqrstuvwxyz";
 	}
 
 	public void displayOutput(AsciiPanel terminal) {
-		ArrayList<String> lines = getList();
+		Iterable<String> lines = getList();
 
 		int y = INV_Y;
 		int x = 2;
 
-		terminal.clear(' ', x, y, INV_WIDTH, Creature.INV_SIZE, AsciiPanel.blue, AsciiPanel.blue);
+		terminal.clear(' ', x, y, INV_WIDTH, Creature.INV_SIZE);
 
 		for (String line : lines) {
-			terminal.write(line, x, y, AsciiPanel.brightYellow, AsciiPanel.blue);
+			terminal.write(line, x, y);
 			y++;
 
 		}
 
 
-		terminal.clear(' ', x - 1, y - 2, 30, 1, AsciiPanel.brightBlack, AsciiPanel.brightBlack);
-		terminal.write("What would you like to " + getVerb() + "?", x, y - 2, AsciiPanel.brightYellow, AsciiPanel.brightBlack);
+		terminal.clear(' ', x - 1, INV_Y - 2, QUERY_WIDTH, 1, AsciiPanel.brightBlack, AsciiPanel.brightBlack);
+		terminal.write("What would you like to " + getVerb() + "?", x, INV_Y - 2, AsciiPanel.brightYellow, AsciiPanel.brightBlack);
 
 		terminal.repaint();
 	}
 
-	private ArrayList<String> getList() {
-		ArrayList<String> lines = new ArrayList<>();
+	private Iterable<String> getList() {
+		Collection<String> lines = new ArrayList<>();
 		Item[] inventory = player.getInventory().getItems();
 
 		for (int i = 0; i < inventory.length; i++) {

@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class Line implements Iterable<Point> {
 	private List<Point> points;
+	/** Not used now, but might be useful for future. */
 	public List<Point> getPoints() {
 		return points;
 	}
@@ -17,7 +18,7 @@ public class Line implements Iterable<Point> {
 	/** I know, all the work is done in the constructor - which is bad practice. However,
 	 * it doesn't really do that much, it just creates a list of points. */
 	public Line(int x0, int y0, int x1, int y1) {
-		this.points = new ArrayList<Point>();
+		this.points = new ArrayList<>();
 
 		int dx = Math.abs(x1 - x0);
 		int dy = Math.abs(y1-y0);

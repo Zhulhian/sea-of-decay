@@ -8,8 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/** A point class, representing a point in the world. Has a X and Y value. Used in Field of View calculating. */
 public class Point {
+	/** The X coordinate of the point. */
 	public int x;
+	/** The Y coordinate of the point. */
 	public int y;
 
 	public Point(int x, int y) {

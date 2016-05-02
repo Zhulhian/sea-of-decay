@@ -9,6 +9,12 @@ public class EntityFactory {
 	private final static char FUNGUS_CHAR = 145;
 	private final static char PLAYER_CHAR = '@';
 	private final static char MOTH_CHAR = 224;
+	/** The character for the mushroom item */
+	public static final char MUSHROOM_CHAR = 140;
+	/** The char for the spore item */
+	public static final char SPORE_CHAR = 15;
+	/** The char for the victory item.*/
+	public static final char VICTORY_ITEM_CHAR = 232;
 	private int fungusSpawned = 0;
 	public int getFungusSpawned() { return fungusSpawned; }
 	private World world;
@@ -21,11 +27,13 @@ public class EntityFactory {
 	/**  -  -  -   Creatures   -  -  -  **/
 
 	public Creature newPlayer(List<String> messages, FieldOfView fov) {
-
-		int playerHP = 125;
-		int playerATK = 15;
+		/** The player hp */
+		int playerHP = 100;
+		int playerATK = 10;
 		int playerDEF = 7;
 
+		/** Is reported as a magical constant, but it is a RGB value, don't think adding a constant for every R, G, and B
+		 *  value for every color is necessary. */
 		Creature player = new Creature(world, "player", PLAYER_CHAR, new Color(255, 38, 3), playerHP, playerATK, playerDEF);
 
 		world.addAtEmptyLocation(player);
@@ -34,7 +42,7 @@ public class EntityFactory {
 		return player;
 	}
 
-	public Creature newMoth() {
+	public void newMoth() {
 
 		int mothHP = 20;
 		int mothATK = 8;
@@ -45,9 +53,9 @@ public class EntityFactory {
 		world.addAtEmptyLocation(moth);
 		moth.setCreatureAi(new MothAi(moth));
 
-		return moth;
 	}
 
+	/** This one is not VOID type because it uses the return type for it's spawn (in FungusAi). */
 	public Creature newFungus() {
 		int fungusHP = 8;
 		int fungusATK = 0;
@@ -65,36 +73,24 @@ public class EntityFactory {
 
 	}
 
-	public Creature newNuclearKnight() {
-		int knightHP = 80;
-		int knightATK = 30;
-		int knightDEF = 20;
-
-		Creature knight = new Creature(world, "nuclear knight", 'N', new Color(246, 255, 0), knightHP, knightATK, knightDEF);
-
-		world.addAtEmptyLocation(knight);
-
-		return knight;
-	}
-
 	/**   -  -  -   Items   -  -  -   **/
 
-	public Item newMushroom() {
-		Item mushroom = new Item((char)140, new Color(252, 244, 249), "mushroom");
+	public void newMushroom() {
+		Item mushroom = new Item(MUSHROOM_CHAR, new Color(252, 244, 249), "mushroom");
 		world.addAtEmptyLocation(mushroom);
-		return mushroom;
+
 	}
 
-	public Item newSpore() {
-		Item spore = new Item((char)15, new Color(255,255,255), "spore");
+	public void newSpore() {
+		Item spore = new Item(SPORE_CHAR, new Color(255,255,255), "spore");
 		world.addAtEmptyLocation(spore);
-		return spore;
+
 	}
 
-	public Item newVictoryItem() {
-		Item item = new Item((char)232, new Color(255,0,255), "Lantern of The Ohm");
+	public void newVictoryItem() {
+		Item item = new Item(VICTORY_ITEM_CHAR, new Color(255,0,255), "Lantern of The Ohm");
 		world.addAtEmptyLocation(item);
-		return item;
+
 	}
 
 }

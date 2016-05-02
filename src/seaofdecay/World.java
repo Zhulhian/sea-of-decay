@@ -2,6 +2,7 @@ package seaofdecay;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /** World class. Holds functions and variables for a world.
@@ -20,6 +21,7 @@ public class World {
 	public int height() { return height; }
 
 	private List<Creature> creatures;
+	/** Not used now, but might be useful for future. */
 	public Iterable<Creature> getCreatures() {
 		return creatures;
 	}
@@ -81,7 +83,7 @@ public class World {
 		items[x][y] = null;
 	}
 
-	public boolean addAtEmptyLocation(Creature creature) {
+	public void addAtEmptyLocation(Creature creature) {
 		int x;
 		int y;
 
@@ -95,10 +97,9 @@ public class World {
 		creature.y = y;
 		creatures.add(creature);
 
-		return true;
 	}
 
-	public boolean addAtEmptyLocation(Item item) {
+	public void addAtEmptyLocation(Item item) {
 		int x;
 		int y;
 
@@ -109,13 +110,12 @@ public class World {
 
 		items[x][y] = item;
 
-		return true;
 	}
 
 	public boolean addAtEmptyLocation(Item item, int x, int y) {
 
 		List<Point> points = new ArrayList<>();
-		List<Point> checked = new ArrayList<>();
+		Collection<Point> checked = new ArrayList<>();
 
 		points.add(new Point(x,y));
 
