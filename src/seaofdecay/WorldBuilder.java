@@ -7,8 +7,9 @@ import seaofdecay.util.xpreader.XPFile;
 /** A class for creating worlds. Holds functions for generating
  * the different world types. */
 public class WorldBuilder {
-	/** The occurance of wall tiles during the */
+	/** Ratio of wall to ground tiles in the Sea of Decay.  */
 	public static final double SOD_WALL_GROUND_RATIO = 0.5;
+	/** Ratio of ground to wall tiles in the abyss */
 	public static final double ABYSS_WALL_GROUND_RATIO = 0.35;
 	private int width;
 	private int height;

@@ -67,6 +67,18 @@ public class World {
 			tiles[x][y] = Tile.SOD_GROUND;
 	}
 
+	public void closeDoor(int x, int y) {
+		assert(getTile(x, y) == Tile.VALLEY_DOOR_OPEN);
+		dig(x, y);
+		setTile(x, y, Tile.VALLEY_DOOR_CLOSED);
+	}
+
+	public void openDoor(int x, int y) {
+		assert(getTile(x, y) == Tile.VALLEY_DOOR_CLOSED);
+		dig(x, y);
+		setTile(x, y, Tile.VALLEY_DOOR_OPEN);
+	}
+
 	public Creature creatureAt(int x, int y) {
 		for (Creature c : creatures) {
 			if (c.x == x && c.y == y)

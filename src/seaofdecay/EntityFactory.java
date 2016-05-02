@@ -9,14 +9,13 @@ public class EntityFactory {
 	private final static char FUNGUS_CHAR = 145;
 	private final static char PLAYER_CHAR = '@';
 	private final static char MOTH_CHAR = 224;
-	/** The character for the mushroom item */
-	public static final char MUSHROOM_CHAR = 140;
-	/** The char for the spore item */
-	public static final char SPORE_CHAR = 15;
-	/** The char for the victory item.*/
-	public static final char VICTORY_ITEM_CHAR = 232;
+	private static final char MUSHROOM_CHAR = 140;
+	private static final char SPORE_CHAR = 15;
+	private static final char VICTORY_ITEM_CHAR = 232;
+
 	private int fungusSpawned = 0;
 	public int getFungusSpawned() { return fungusSpawned; }
+
 	private World world;
 
 	public EntityFactory(World world) {
@@ -28,9 +27,9 @@ public class EntityFactory {
 
 	public Creature newPlayer(List<String> messages, FieldOfView fov) {
 		/** The player hp */
-		int playerHP = 100;
-		int playerATK = 10;
-		int playerDEF = 7;
+		final int playerHP = 125;
+		final int playerATK = 15;
+		final int playerDEF = 7;
 
 		/** Is reported as a magical constant, but it is a RGB value, don't think adding a constant for every R, G, and B
 		 *  value for every color is necessary. */
@@ -43,10 +42,9 @@ public class EntityFactory {
 	}
 
 	public void newMoth() {
-
-		int mothHP = 20;
-		int mothATK = 8;
-		int mothDEF = 3;
+		final int mothHP = 20;
+		final int mothATK = 8;
+		final int mothDEF = 3;
 
 		Creature moth = new Creature(world, "moth", MOTH_CHAR, new Color(255, 176, 1), mothHP, mothATK, mothDEF);
 
@@ -57,9 +55,9 @@ public class EntityFactory {
 
 	/** This one is not VOID type because it uses the return type for it's spawn (in FungusAi). */
 	public Creature newFungus() {
-		int fungusHP = 8;
-		int fungusATK = 0;
-		int fungusDEF = 1;
+		final int fungusHP = 8;
+		final int fungusATK = 0;
+		final int fungusDEF = 1;
 		fungusSpawned++;
 
 		Creature fungus = new Creature(world, "fungus", FUNGUS_CHAR, new Color(63, 249, 63), fungusHP, fungusATK, fungusDEF);

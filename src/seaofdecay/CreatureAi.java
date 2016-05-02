@@ -36,9 +36,8 @@ public class CreatureAi {
 
     public void onUpdate() { }
 
-	/** Yes it is a complex expression, but calculating field of view is a complex operation. */
 	public boolean canSee(int wx, int wy) {
-		if ((creature.x - wx) * (creature.x - wx) + (creature.y - wy) * (creature.y - wy) >
+		if (Math.sqrt((creature.x - wx))+ Math.sqrt((creature.y - wy)) >
 				creature.getVisionRadius() * creature.getVisionRadius()) {
 			return false;
 		}

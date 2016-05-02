@@ -158,6 +158,8 @@ public class Creature {
 
 	/** Add ability to format strings! Good for displaying variable values,
 	 * like damage done, HP recovered, etc. etc. */
+	/** Not sure what this means. I couldn't find any conventions for naming overloaded methods.
+	 * Perhaps it wants me to use void * instead of  . . .*/
 	public void notify(String message, Object ... params) {
 		ai.onNotify(String.format(message, params));
 	}

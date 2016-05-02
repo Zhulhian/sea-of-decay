@@ -200,50 +200,70 @@ public class PlayScreen implements Screen {
 			subscreen.displayOutput(terminal);
 	}
 
-	/** Not sure what to do here. It says it might be difficult to understand, but looking at the function you
-	 * can clearly see what it does. */
+	private Screen enterPortal() {
+		Tile playerTile = world.getTile(player.x, player.y);
+		if (playerTile == Tile.VALLEY_PORTAL) {
+			return new PlayScreen(WorldType.SEA_OF_DECAY);
+		}
+		else if (playerTile == Tile.SOD_PORTAL) {
+			for (Item item : player.getInventory().getItems()) {
+				if (item != null && item.getName().equals("Lantern of The Ohm"))
+					return new WinScreen();
+			}
+			return new PlayScreen(WorldType.ABYSS);
+		}
+		else {
+			return this;
+		}
+	}
+
+	/** Yes it is long... but in roguelike games there are a lot of keys to be used, many of them have lots more than this.
+	 * Not sure how to circumvent having a lot of keys. I don't think this is that unreasonably long. */
 	public Screen respondToUserInput(KeyEvent key) {
 		if (subscreen != null) {
 			subscreen = subscreen.respondToUserInput(key);
 		} else {
 			switch (key.getKeyCode()) {
-				// Cheats
-				case KeyEvent.VK_ESCAPE:
-					return new LoseScreen();
-				case KeyEvent.VK_ENTER:
-					return new WinScreen();
 
-				case KeyEvent.VK_T:
-					return new PlayScreen(WorldType.SEA_OF_DECAY);
+				/** I've left the cheats as comments in case you want to use them for easy debugging. */
+				//				// Cheats
+				//				case KeyEvent.VK_ESCAPE:
+				//					return new LoseScreen();
+				//				case KeyEvent.VK_ENTER:
+				//					return new WinScreen();
+				//
+				//				case KeyEvent.VK_T:
+				//					return new PlayScreen(WorldType.SEA_OF_DECAY);
+				//
+				//				case KeyEvent.VK_V:
+				//					return new PlayScreen(WorldType.VALLEY);
+				//
+				//				case KeyEvent.VK_A:
+				//					return new PlayScreen(WorldType.ABYSS);
 
-				case KeyEvent.VK_V:
-					return new PlayScreen(WorldType.VALLEY);
-
-				case KeyEvent.VK_A:
-					return new PlayScreen(WorldType.ABYSS);
 
 				//      -  -  -    Movement    -  -  -       //
 
 				// Left
-				case KeyEvent.VK_LEFT:
+
 				case KeyEvent.VK_H:
 					player.moveBy(-1, 0);
 					break;
 
 				// Right
-				case KeyEvent.VK_RIGHT:
+
 				case KeyEvent.VK_L:
 					player.moveBy(1, 0);
 					break;
 
 				// Up
-				case KeyEvent.VK_UP:
+
 				case KeyEvent.VK_K:
 					player.moveBy(0, -1);
 					break;
 
 				// Down
-				case KeyEvent.VK_DOWN:
+
 				case KeyEvent.VK_J:
 					player.moveBy(0, 1);
 					break;
@@ -267,8 +287,7 @@ public class PlayScreen implements Screen {
 					Point playerPos = new Point(player.x, player.y);
 					for (Point p : playerPos.neighbors8()) {
 						if (world.getTile(p.x, p.y) == Tile.VALLEY_DOOR_OPEN) {
-							world.dig(p.x, p.y);
-							world.setTile(p.x, p.y, Tile.VALLEY_DOOR_CLOSED);
+							world.closeDoor(p.x, p.y);
 							player.doAction("close the door");
 							break;
 						}
@@ -280,7 +299,6 @@ public class PlayScreen implements Screen {
 
 				/** Pick up item. */
 				case KeyEvent.VK_G:
-				case KeyEvent.VK_COMMA:
 					player.pickup();
 					break;
 
@@ -288,18 +306,12 @@ public class PlayScreen implements Screen {
 			}
 		}
 
-		if (world.getTile(player.x, player.y) == Tile.VALLEY_PORTAL) {
-			return new PlayScreen(WorldType.SEA_OF_DECAY);
+		if (world.getTile(player.x, player.y) == Tile.VALLEY_PORTAL ||
+				world.getTile(player.x, player.y) == Tile.SOD_PORTAL) {
+			return enterPortal();
 		}
 
-		if (world.getTile(player.x, player.y) == Tile.SOD_PORTAL) {
-			for (Item item : player.getInventory().getItems()) {
-				if (item != null && item.getName().equals("Lantern of The Ohm"))
-					return new WinScreen();
-			}
-			return new PlayScreen(WorldType.ABYSS);
-		}
-
+		/** When we have a subscreen, we don't update the world. */
 		if (subscreen == null) {
 			world.update();
 		}
@@ -311,3 +323,4 @@ public class PlayScreen implements Screen {
 		return this;
 	}
 }
+

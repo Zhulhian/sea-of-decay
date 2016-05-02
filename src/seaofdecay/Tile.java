@@ -101,6 +101,7 @@ public enum Tile {
 		return Tile.BOUNDS;
 	}
 
+	/** I do not understand this. It /IS/ used. */
 	Tile(char glyph, WorldType worldType, boolean transparent, boolean isGround, Color fgColor, Color bgColor) {
 		this.glyph = glyph;
 		this.worldType = worldType;
